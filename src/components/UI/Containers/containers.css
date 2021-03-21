@@ -1,0 +1,15 @@
+.menu-container {
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(44, 41, 41, 0.8);
+  padding: 24px;
+  border-radius: 6px;
+  border: 2px solid rgba(0, 0, 0, 0.438);
+}
+
+.transparent {
+  background-color: transparent;
+  border: none;
+}
