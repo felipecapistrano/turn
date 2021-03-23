@@ -21,6 +21,12 @@ export const completeAction = (targetId) => {
   };
 };
 
+export const enemyTurn = () => {
+  return {
+    type: "ENEMY_TURN",
+  };
+};
+
 // PARTY
 
 export const addCharacters = (characters) => {

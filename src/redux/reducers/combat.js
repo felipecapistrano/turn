@@ -6,15 +6,6 @@ function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if (new Date().getTime() - start > milliseconds) {
-      break;
-    }
-  }
-}
-
 function target(state, targetId) {
   const skill = ACTIONS_PARAMS[state.currentAction];
   const damage = randomNumber(skill.minDamage, skill.maxDamage);
@@ -59,16 +50,13 @@ function enemyTurn(state) {
 function nextTurn(state) {
   const participants = state.participants;
   participants.push(participants.shift());
-  let newState = {
+  const newState = {
     ...state,
     participants,
     turn: state.turn + 1,
     turnCharacter: participants[0],
   };
 
-  if (newState.turnCharacter.id > 1000) {
-    newState = enemyTurn(newState);
-  }
   return { ...newState };
 }
 
@@ -94,8 +82,6 @@ const combat = (state = initialState, action) => {
       });
 
       const turnCharacter = participants[0];
-      if (turnCharacter.id > 1000)
-        return enemyTurn({ ...state, participants, turnCharacter });
 
       return { ...state, participants, turnCharacter };
     }
@@ -114,6 +100,9 @@ const combat = (state = initialState, action) => {
         currentAction: ACTIONS.NONE,
         targets: TARGETS.NONE,
       });
+    }
+    case "ENEMY_TURN": {
+      return enemyTurn(state);
     }
     default:
       return state;

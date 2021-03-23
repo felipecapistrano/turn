@@ -7,6 +7,7 @@ export default function CombatInfo() {
 
   return characters.map((character, index) => (
     <MenuContainer
+      key={character.id}
       transparent
       style={{
         width: "16%",

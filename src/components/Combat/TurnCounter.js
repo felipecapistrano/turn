@@ -23,9 +23,8 @@ export default function TurnCounter() {
       <div style={styles.typography}>Turn: {turn}</div>
       <div style={styles.characters}>
         {participants.map((participant, index) => (
-          <div style={styles.next}>
+          <div key={participant.id} style={styles.next}>
             <img
-              key={participant.id}
               style={styles.sprite}
               src={participant.sprite}
               alt={participant.name}
