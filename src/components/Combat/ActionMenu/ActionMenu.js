@@ -6,7 +6,7 @@ import { Button } from "../../UI/Buttons";
 import { MenuContainer } from "../../UI/Containers";
 
 export default function ActionMenu() {
-  const { currentAction, turnCharacter } = useSelector((state) => state.combat);
+  const { currentAction } = useSelector((state) => state.combat);
   const dispatch = useDispatch();
 
   return (
