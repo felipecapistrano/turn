@@ -14,6 +14,13 @@ export const setAction = (currentAction) => {
   };
 };
 
+export const startAnimation = (targetId) => {
+  return {
+    type: "START_ANIMATION",
+    payload: targetId,
+  };
+};
+
 export const completeAction = (targetId) => {
   return {
     type: "COMPLETE_ACTION",
@@ -24,6 +31,12 @@ export const completeAction = (targetId) => {
 export const enemyTurn = () => {
   return {
     type: "ENEMY_TURN",
+  };
+};
+
+export const nextTurn = () => {
+  return {
+    type: "NEXT_TURN",
   };
 };
 

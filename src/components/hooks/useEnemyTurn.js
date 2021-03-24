@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { enemyTurn } from "../../redux/actions";
+import { enemyTurn, nextTurn } from "../../redux/actions";
 
 export default function useEnemyTurn() {
   const dispatch = useDispatch();
@@ -9,6 +9,9 @@ export default function useEnemyTurn() {
   const isEnemy = turnCharacter?.id > 1000;
 
   useEffect(() => {
-    if (isEnemy) setTimeout(() => dispatch(enemyTurn()), 1200);
+    if (isEnemy) {
+      setTimeout(() => dispatch(enemyTurn()), 500);
+      setTimeout(() => dispatch(nextTurn()), 1500);
+    }
   }, [isEnemy, dispatch]);
 }

@@ -5,7 +5,7 @@ const placeholder1 = {
   sprite:
     "https://i.pinimg.com/originals/33/1c/3b/331c3b9354fe0807c850f0240f03271e.png",
   name: "Placeholder1",
-  currentHP: 10,
+  currentHP: 2,
   maxHP: 11,
   currentMP: 7,
   maxMP: 20,

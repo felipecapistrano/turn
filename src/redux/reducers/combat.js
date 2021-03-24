@@ -6,12 +6,17 @@ function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function target(state, targetId) {
+function targetUnit(state, targetId) {
   const skill = ACTIONS_PARAMS[state.currentAction];
   const damage = randomNumber(skill.minDamage, skill.maxDamage);
   const participants = state.participants.map((participant) => {
     if (participant.id === targetId) {
-      participant.currentHP -= damage;
+      if (participant.currentHP - damage <= 0) {
+        participant.currentHP = 0;
+        participant.dead = true;
+      } else {
+        participant.currentHP -= damage;
+      }
     }
     return participant;
   });
@@ -24,37 +29,46 @@ function enemyTurn(state) {
     (participant) => participant.id < 1000
   );
   let newParticipants;
+  let target = { currentHP: 999 };
 
   if (enemy.ai === AI.WEAKEST) {
-    let weakest = party[0];
-    party.forEach((ally) =>
-      ally.currentHP < weakest.currentHP ? (weakest = ally) : null
-    );
-    newParticipants = target(
+    party.forEach((ally) => {
+      if (!ally.dead) {
+        if (ally.currentHP < target.currentHP) target = ally;
+      }
+    });
+
+    newParticipants = targetUnit(
       { ...state, currentAction: enemy.attacks[0] },
-      weakest.id
+      target.id
     );
   }
 
-  newParticipants.push(newParticipants.shift());
-
   return {
     ...state,
-    currentAction: ACTIONS.NONE,
     turn: state.turn + 1,
+    currentAction: enemy.attacks[0],
     participants: [...newParticipants],
     turnCharacter: newParticipants[0],
+    animationTarget: target.id,
   };
 }
 
 function nextTurn(state) {
   const participants = state.participants;
   participants.push(participants.shift());
+
+  while (participants[0].dead) {
+    participants.push(participants.shift());
+  }
+
   const newState = {
     ...state,
     participants,
+    currentAction: ACTIONS.NONE,
     turn: state.turn + 1,
     turnCharacter: participants[0],
+    animationTarget: null,
   };
 
   return { ...newState };
@@ -66,6 +80,7 @@ const initialState = {
   participants: [],
   turnCharacter: null,
   currentAction: ACTIONS.NONE,
+  animationTarget: null,
 };
 
 const combat = (state = initialState, action) => {
@@ -85,25 +100,41 @@ const combat = (state = initialState, action) => {
 
       return { ...state, participants, turnCharacter };
     }
+
     case "SET_ACTION": {
       const currentAction = action.payload;
       const { targets } = ACTIONS_PARAMS[currentAction];
       return { ...state, currentAction, targets };
     }
+
+    case "START_ANIMATION": {
+      const targetId = action.payload;
+
+      return {
+        ...state,
+        animationTarget: targetId,
+      };
+    }
     case "COMPLETE_ACTION": {
       const targetId = action.payload;
-      const newParticipants = target(state, targetId);
+      const newParticipants = targetUnit(state, targetId);
 
-      return nextTurn({
+      return {
         ...state,
         participants: newParticipants,
-        currentAction: ACTIONS.NONE,
         targets: TARGETS.NONE,
-      });
+        animationTarget: targetId,
+      };
     }
+
     case "ENEMY_TURN": {
       return enemyTurn(state);
     }
+
+    case "NEXT_TURN": {
+      return nextTurn(state);
+    }
+
     default:
       return state;
   }

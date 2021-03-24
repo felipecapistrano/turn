@@ -6,7 +6,11 @@
 }
 
 html {
-  background-image: url(https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallup.net%2Fwp-content%2Fuploads%2F2018%2F09%2F29%2F617356-rnity-fantasy-mmo-rpg-fantasy-platform-1deternity-fighting-online-forest.jpg&f=1&nofb=1);
+  background-image: url("./assets/backgrounds/combat1.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%; 
 }
 
 .game {
