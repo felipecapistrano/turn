@@ -1,3 +1,4 @@
 export { TARGETS } from "./targets";
-export { ACTIONS, ACTIONS_PARAMS } from "./actions";
+export { SKILL_TYPES } from "./skillTypes";
 export { AI } from "./ai";
+export { ACTIONS, ACTIONS_PARAMS } from "./actions";

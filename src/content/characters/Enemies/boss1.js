@@ -10,7 +10,7 @@ const boss1 = {
   currentHP: 80,
   maxHP: 80,
   speed: 6,
-  attacks: [ACTIONS.ATTACK],
+  skills: [ACTIONS.ATTACK],
 };
 
 export default boss1;

@@ -10,6 +10,7 @@ const placeholder3 = {
   currentMP: 9,
   maxMP: 11,
   speed: 7,
+  skills: [],
 };
 
 export default placeholder3;

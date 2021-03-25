@@ -1,3 +1,5 @@
+import { ACTIONS } from "../../constants";
+
 const placeholder1 = {
   id: 1,
   portrait:
@@ -5,11 +7,12 @@ const placeholder1 = {
   sprite:
     "https://i.pinimg.com/originals/33/1c/3b/331c3b9354fe0807c850f0240f03271e.png",
   name: "Placeholder1",
-  currentHP: 2,
+  currentHP: 10,
   maxHP: 11,
-  currentMP: 7,
+  currentMP: 12,
   maxMP: 20,
   speed: 5,
+  skills: [ACTIONS.HEAL1],
 };
 
 export default placeholder1;

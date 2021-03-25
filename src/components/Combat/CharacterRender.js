@@ -22,7 +22,8 @@ export default function CharacterRender({
   const canTarget =
     ((isEnemy && (targets === TARGETS.ENEMIES || targets === TARGETS.ALL)) ||
       (!isEnemy && (targets === TARGETS.PARTY || targets === TARGETS.ALL))) &&
-    hovered;
+    hovered &&
+    !character.dead;
 
   const height = 180 * size;
   const width = 140 * size;
@@ -57,7 +58,7 @@ export default function CharacterRender({
       width: width / 2,
     },
   };
-  console.log(currentAction);
+
   return (
     <div
       onClick={

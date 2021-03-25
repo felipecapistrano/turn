@@ -1,4 +1,10 @@
-import { TARGETS, AI, ACTIONS, ACTIONS_PARAMS } from "../../content/constants";
+import {
+  TARGETS,
+  AI,
+  ACTIONS,
+  ACTIONS_PARAMS,
+  SKILL_TYPES,
+} from "../../content/constants";
 
 function randomNumber(min, max) {
   min = Math.ceil(min);
@@ -8,14 +14,24 @@ function randomNumber(min, max) {
 
 function targetUnit(state, targetId) {
   const skill = ACTIONS_PARAMS[state.currentAction];
-  const damage = randomNumber(skill.minDamage, skill.maxDamage);
+  const skillType = skill.type;
+  const roll = randomNumber(skill.minDamage, skill.maxDamage);
+
   const participants = state.participants.map((participant) => {
     if (participant.id === targetId) {
-      if (participant.currentHP - damage <= 0) {
-        participant.currentHP = 0;
-        participant.dead = true;
-      } else {
-        participant.currentHP -= damage;
+      if (skillType === SKILL_TYPES.DAMAGE) {
+        if (participant.currentHP - roll <= 0) {
+          participant.currentHP = 0;
+          participant.dead = true;
+        } else {
+          participant.currentHP -= roll;
+        }
+      } else if (skillType === SKILL_TYPES.HEAL) {
+        if (participant.currentHP + roll >= participant.maxHP) {
+          participant.currentHP = participant.maxHP;
+        } else {
+          participant.currentHP += roll;
+        }
       }
     }
     return participant;
@@ -39,7 +55,7 @@ function enemyTurn(state) {
     });
 
     newParticipants = targetUnit(
-      { ...state, currentAction: enemy.attacks[0] },
+      { ...state, currentAction: enemy.skills[0] },
       target.id
     );
   }
@@ -47,7 +63,7 @@ function enemyTurn(state) {
   return {
     ...state,
     turn: state.turn + 1,
-    currentAction: enemy.attacks[0],
+    currentAction: enemy.skills[0],
     participants: [...newParticipants],
     turnCharacter: newParticipants[0],
     animationTarget: target.id,
