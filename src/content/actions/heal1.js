@@ -9,6 +9,7 @@ const heal1 = {
   targets: TARGETS.PARTY,
   animation: heal1Animation,
   timing: 1000,
+  cost: 5,
 };
 
 export default heal1;

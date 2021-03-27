@@ -11,11 +11,16 @@ export default function ActionMenu() {
   const [skills, setSkills] = useState(false);
   const toggle = () => setSkills(!skills);
 
-  const { turnCharacter } = useSelector((state) => state.combat);
+  const { turnCharacter, currentAction, animation } = useSelector(
+    (state) => state.combat
+  );
   const dispatch = useDispatch();
 
-  const disabled = turnCharacter.id > 1000;
+  const enemyTurn = turnCharacter.id > 1000;
 
+  if (animation.target || enemyTurn) return null;
+  console.log(currentAction);
+  console.log(ACTIONS.ATTACK);
   return (
     <>
       {skills && <SkillSelector skills={turnCharacter.skills} close={toggle} />}
@@ -30,19 +35,19 @@ export default function ActionMenu() {
         }}
       >
         <Button
-          disabled={disabled}
+          pressed={currentAction === ACTIONS.ATTACK}
+          disabled={enemyTurn}
           onClick={() => {
-            setSkills(false);
             dispatch(setAction(ACTIONS.ATTACK));
           }}
         >
           Attack
         </Button>
-        <Button disabled={disabled} onClick={() => toggle()}>
+        <Button disabled={enemyTurn} onClick={() => toggle()}>
           Skills
         </Button>
-        <Button disabled={disabled}>Item</Button>
-        <Button disabled={disabled}>Guard</Button>
+        <Button disabled={enemyTurn}>Item</Button>
+        <Button disabled={enemyTurn}>Guard</Button>
       </MenuContainer>
     </>
   );

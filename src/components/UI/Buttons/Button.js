@@ -1,8 +1,21 @@
 import "./buttons.css";
 
-export default function Button({ children, onClick, ...props }) {
+export default function Button({
+  children,
+  onClick,
+  disabled,
+  pressed,
+  ...props
+}) {
   return (
-    <button onClick={onClick} className="button" {...props}>
+    <button
+      disabled={disabled}
+      onClick={onClick}
+      className={`button ${disabled ? "disabled" : ""} ${
+        pressed ? "pressed" : ""
+      }`}
+      {...props}
+    >
       {children}
     </button>
   );

@@ -13,11 +13,17 @@ function randomNumber(min, max) {
 }
 
 function targetUnit(state, targetId) {
+  const turnCharacter = state.turnCharacter;
+
+  const isSkill = state.currentAction !== ACTIONS.ATTACK;
   const skill = ACTIONS_PARAMS[state.currentAction];
   const skillType = skill.type;
   const roll = randomNumber(skill.minDamage, skill.maxDamage);
 
   const participants = state.participants.map((participant) => {
+    if (participant.id === turnCharacter.id && isSkill) {
+      participant.currentMP -= skill.cost;
+    }
     if (participant.id === targetId) {
       if (skillType === SKILL_TYPES.DAMAGE) {
         if (participant.currentHP - roll <= 0) {
@@ -36,7 +42,7 @@ function targetUnit(state, targetId) {
     }
     return participant;
   });
-  return participants;
+  return [participants, { target: targetId, damage: roll, type: skillType }];
 }
 
 function enemyTurn(state) {
@@ -45,6 +51,7 @@ function enemyTurn(state) {
     (participant) => participant.id < 1000
   );
   let newParticipants;
+  let animation;
   let target = { currentHP: 999 };
 
   if (enemy.ai === AI.WEAKEST) {
@@ -54,7 +61,7 @@ function enemyTurn(state) {
       }
     });
 
-    newParticipants = targetUnit(
+    [newParticipants, animation] = targetUnit(
       { ...state, currentAction: enemy.skills[0] },
       target.id
     );
@@ -66,7 +73,7 @@ function enemyTurn(state) {
     currentAction: enemy.skills[0],
     participants: [...newParticipants],
     turnCharacter: newParticipants[0],
-    animationTarget: target.id,
+    animation,
   };
 }
 
@@ -84,7 +91,7 @@ function nextTurn(state) {
     currentAction: ACTIONS.NONE,
     turn: state.turn + 1,
     turnCharacter: participants[0],
-    animationTarget: null,
+    animation: { target: null, damage: null, type: null },
   };
 
   return { ...newState };
@@ -96,7 +103,7 @@ const initialState = {
   participants: [],
   turnCharacter: null,
   currentAction: ACTIONS.NONE,
-  animationTarget: null,
+  animation: { target: null, damage: null, type: null },
 };
 
 const combat = (state = initialState, action) => {
@@ -123,23 +130,15 @@ const combat = (state = initialState, action) => {
       return { ...state, currentAction, targets };
     }
 
-    case "START_ANIMATION": {
-      const targetId = action.payload;
-
-      return {
-        ...state,
-        animationTarget: targetId,
-      };
-    }
     case "COMPLETE_ACTION": {
       const targetId = action.payload;
-      const newParticipants = targetUnit(state, targetId);
+      const [newParticipants, animation] = targetUnit(state, targetId);
 
       return {
         ...state,
         participants: newParticipants,
         targets: TARGETS.NONE,
-        animationTarget: targetId,
+        animation,
       };
     }
 
