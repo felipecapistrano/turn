@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 
+import { useCharacterSkills } from "../../hooks/";
 import { ACTIONS_PARAMS } from "../../../content/constants";
 import { setAction } from "../../../redux/actions";
 import { Button } from "../../UI/Buttons";
@@ -17,10 +18,10 @@ const styles = {
   },
 };
 
-export default function SkillSelector({ skills, close }) {
+export default function SkillSelector({ close }) {
   const dispatch = useDispatch();
+  const skills = useCharacterSkills();
   const { turnCharacter, currentAction } = useSelector((state) => state.combat);
-
   return (
     <MenuContainer
       style={{
@@ -34,6 +35,7 @@ export default function SkillSelector({ skills, close }) {
       <div style={styles.title}>Skills</div>
       {skills.map((skill) => (
         <Button
+          key={skill}
           pressed={currentAction === skill}
           style={styles.skill}
           disabled={turnCharacter.currentMP < ACTIONS_PARAMS[skill].cost}

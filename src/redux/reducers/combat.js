@@ -15,13 +15,12 @@ function randomNumber(min, max) {
 function targetUnit(state, targetId) {
   const turnCharacter = state.turnCharacter;
 
-  const isSkill = state.currentAction !== ACTIONS.ATTACK;
   const skill = ACTIONS_PARAMS[state.currentAction];
   const skillType = skill.type;
   const roll = randomNumber(skill.minDamage, skill.maxDamage);
 
   const participants = state.participants.map((participant) => {
-    if (participant.id === turnCharacter.id && isSkill) {
+    if (participant.id === turnCharacter.id) {
       participant.currentMP -= skill.cost;
     }
     if (participant.id === targetId) {

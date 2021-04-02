@@ -1,4 +1,4 @@
-import { ACTIONS } from "../../constants";
+import { WEAPONS, CLOTHES } from "../../constants/";
 
 const placeholder1 = {
   id: 1,
@@ -12,7 +12,7 @@ const placeholder1 = {
   currentMP: 12,
   maxMP: 20,
   speed: 5,
-  skills: [ACTIONS.HEAL1],
+  equips: { weapon: WEAPONS.STAFF_OF_HEALING, clothes: CLOTHES.NONE },
 };
 
 export default placeholder1;

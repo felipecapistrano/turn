@@ -1,3 +1,5 @@
+import { WEAPONS, CLOTHES } from "../../constants/";
+
 const placeholder3 = {
   id: 3,
   portrait:
@@ -10,7 +12,7 @@ const placeholder3 = {
   currentMP: 9,
   maxMP: 11,
   speed: 7,
-  skills: [],
+  equips: { weapon: WEAPONS.APPRENTICE_STAFF, clothes: CLOTHES.NONE },
 };
 
 export default placeholder3;

@@ -19,11 +19,10 @@ export default function ActionMenu() {
   const enemyTurn = turnCharacter.id > 1000;
 
   if (animation.target || enemyTurn) return null;
-  console.log(currentAction);
-  console.log(ACTIONS.ATTACK);
+
   return (
     <>
-      {skills && <SkillSelector skills={turnCharacter.skills} close={toggle} />}
+      {skills && <SkillSelector close={toggle} />}
       <MenuContainer
         style={{
           width: "40%",
@@ -46,8 +45,6 @@ export default function ActionMenu() {
         <Button disabled={enemyTurn} onClick={() => toggle()}>
           Skills
         </Button>
-        <Button disabled={enemyTurn}>Item</Button>
-        <Button disabled={enemyTurn}>Guard</Button>
       </MenuContainer>
     </>
   );
